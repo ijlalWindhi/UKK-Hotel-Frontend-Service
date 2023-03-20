@@ -39,11 +39,11 @@ export default function LoginForm() {
     setTimeout(() => {
       if (res.status === "success") {
         if (res.data.role === "admin") {
-          navigate("/dashboard/admin");
-        } else if (res.data.role === "user") {
-          navigate("/dashboard/user");
+          navigate("/dashboard/admin/");
+        } else if (res.data.role === "resepsionis") {
+          navigate("/dashboard/resepsionis/");
         } else {
-          navigate("/dashboard/tamu");
+          navigate("/dashboard/tamu/");
         }
       }
       setMessage("");

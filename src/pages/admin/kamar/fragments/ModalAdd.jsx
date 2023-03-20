@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { addKamar } from "../../../../utils/store/reducers/kamarSlice";
+import { addKamar, getAllDataKamar } from "../../../../utils/store/reducers/kamarSlice";
 import { tipeKamarSelectors } from "../../../../utils/store/reducers/tipeKamarSlice";
 import AlertNotification from "../../../../components/alert";
 
@@ -40,6 +40,7 @@ export default function ModalAdd({ isOpen, onClose }) {
     setMessage(res.payload.message);
     setStatus(res.payload.status);
     if (res.payload.status === "success") {
+      dispatch(getAllDataKamar());
       setTimeout(() => {
         onClose(), reset(), setStatus(""), setMessage("");
         setIsLoading(false);

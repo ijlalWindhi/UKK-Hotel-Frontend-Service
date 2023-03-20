@@ -62,6 +62,32 @@ export const searchTipeKamar = createAsyncThunk(
   }
 );
 
+export const checkAvailableKamarByDate = createAsyncThunk(
+  "tipeKamar/checkAvailableKamarByDate",
+  async ({ check_in, check_out }) => {
+    const URL = `${BASE_API}/kamar/getTipeKamarUnavailable/${check_in}T00:00:00.000Z/${check_out}T05:00:00.000Z`;
+    try {
+      const data = await axios.get(URL, {
+        headers: {
+          Authorization: `Bearer ${getLocalStorage(LOCAL_STORAGE_TOKEN)}`,
+        },
+      });
+      const res = data.data;
+      if (res.status === "success") {
+        return Promise.resolve({
+          status: "success",
+          data: res.data,
+        });
+      }
+    } catch (err) {
+      return Promise.resolve({
+        status: "error",
+        message: err.response.data.message,
+      });
+    }
+  }
+);
+
 export const addTipeKamar = createAsyncThunk(
   "tipeKamar/addTipeKamar",
   async (values) => {
@@ -160,6 +186,11 @@ const tipeKamarSlice = createSlice({
       }
     });
     builder.addCase(searchTipeKamar.fulfilled, (state, action) => {
+      if (action.payload.status === "success") {
+        tipeKamarAdapter.setAll(state, action.payload.data);
+      }
+    });
+    builder.addCase(checkAvailableKamarByDate.fulfilled, (state, action) => {
       if (action.payload.status === "success") {
         tipeKamarAdapter.setAll(state, action.payload.data);
       }

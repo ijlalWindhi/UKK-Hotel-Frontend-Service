@@ -35,6 +35,33 @@ export const getAllDataKamar = createAsyncThunk(
   }
 );
 
+export const getByTipeKamarAvailable = createAsyncThunk(
+  "kamar/getByTipeKamarAvailable",
+  async (id) => {
+    const URL = `${BASE_API}/kamar/getByTipeKamarAvailable/${id}`;
+    try {
+      const data = await axios.get(URL, {
+        headers: {
+          Authorization: `Bearer ${getLocalStorage(LOCAL_STORAGE_TOKEN)}`,
+        },
+      });
+      const res = data.data;
+
+      if (res.status === "success") {
+        return Promise.resolve({
+          status: "success",
+          data: res.data,
+        });
+      }
+    } catch (err) {
+      return Promise.resolve({
+        status: "error",
+        message: err.response.data.message,
+      });
+    }
+  }
+);
+
 export const searchNomorKamar = createAsyncThunk(
   "kamar/searchNomorKamar",
   async (value) => {
@@ -149,6 +176,11 @@ const kamarSlice = createSlice({
   initialState: kamarAdapter.getInitialState(),
   extraReducers: (builder) => {
     builder.addCase(getAllDataKamar.fulfilled, (state, action) => {
+      if (action.payload.status === "success") {
+        kamarAdapter.setAll(state, action.payload.data);
+      }
+    });
+    builder.addCase(getByTipeKamarAvailable.fulfilled, (state, action) => {
       if (action.payload.status === "success") {
         kamarAdapter.setAll(state, action.payload.data);
       }

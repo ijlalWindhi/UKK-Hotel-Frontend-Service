@@ -15,13 +15,18 @@ import { BsBuilding, BsFillGrid1X2Fill } from "react-icons/bs";
 import {
   AiFillBuild,
   AiFillDollarCircle,
-  AiFillSetting,
+  AiOutlineHistory,
   AiTwotoneFilePdf,
   AiOutlineDoubleLeft,
   AiOutlineDoubleRight,
 } from "react-icons/ai";
 import { TiMediaPlay } from "react-icons/ti";
-import { FaUserAlt, FaHandHolding, FaUserTie } from "react-icons/fa";
+import {
+  FaUserAlt,
+  FaHandHolding,
+  FaUserTie,
+  FaNewspaper,
+} from "react-icons/fa";
 import {
   MdCategory,
   MdBedroomParent,
@@ -34,6 +39,8 @@ import NavAccordion from "./fragments/NavAccordion";
 import { useDispatch, useSelector } from "react-redux";
 import { handleCiutkan } from "../../utils/store/reducers/globalSlice";
 import Logout from "./fragments/Logout";
+import { getLocalStorage } from "../../utils/helper/localStorage";
+import { LOCAL_STORAGE_USER } from "../../utils/constants";
 
 const propertyMenus = [
   {
@@ -89,6 +96,7 @@ export default function Sidebar() {
   const dispatch = useDispatch();
   const ciutkan = useSelector((state) => state.global.ciutkan);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const dataUser = getLocalStorage(LOCAL_STORAGE_USER);
 
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
@@ -155,26 +163,68 @@ export default function Sidebar() {
         >
           <Stack w={"full"}>
             <Box w={"full"}>
-              <NavItem
-                link={"/dashboard/admin/"}
-                label={"Dashboard"}
-                icon={BsFillGrid1X2Fill}
-              />
-              <NavItem
-                link={"/dashboard/admin/kamar"}
-                label={"Kamar"}
-                icon={MdBedroomParent}
-              />
-              <NavItem
-                link={"/dashboard/admin/tipe-kamar"}
-                label={"Tipe Kamar"}
-                icon={MdBedtime}
-              />
-              <NavItem
-                link={"/dashboard/admin/User"}
-                label={"Pengguna"}
-                icon={FaUserAlt}
-              />
+              {dataUser.role === "admin" && (
+                <>
+                  <NavItem
+                    link={"/dashboard/admin/"}
+                    label={"Dashboard"}
+                    icon={BsFillGrid1X2Fill}
+                  />
+                  <NavItem
+                    link={"/dashboard/admin/kamar"}
+                    label={"Kamar"}
+                    icon={MdBedroomParent}
+                  />
+                  <NavItem
+                    link={"/dashboard/admin/tipe-kamar"}
+                    label={"Tipe Kamar"}
+                    icon={MdBedtime}
+                  />
+                  <NavItem
+                    link={"/dashboard/admin/User"}
+                    label={"Pengguna"}
+                    icon={FaUserAlt}
+                  />
+                </>
+              )}
+              {dataUser.role === "resepsionis" && (
+                <>
+                  <NavItem
+                    link={"/dashboard/resepsionis/"}
+                    label={"Dashboard"}
+                    icon={BsFillGrid1X2Fill}
+                  />
+                  <NavItem
+                    link={"/dashboard/resepsionis/pemesanan"}
+                    label={"Pemesanan"}
+                    icon={FaNewspaper}
+                  />
+                </>
+              )}
+              {dataUser.role === "tamu" && (
+                <>
+                  <NavItem
+                    link={"/dashboard/tamu/"}
+                    label={"Dashboard"}
+                    icon={BsFillGrid1X2Fill}
+                  />
+                  <NavItem
+                    link={"/dashboard/tamu/kamar"}
+                    label={"Kamar"}
+                    icon={MdBedroomParent}
+                  />
+                  <NavItem
+                    link={"/dashboard/tamu/histori-pemesanan"}
+                    label={"Histori Pemesanan"}
+                    icon={AiOutlineHistory}
+                  />
+                  <NavItem
+                    link={"/dashboard/tamu/cek-pemesanan"}
+                    label={"Cek Pemesanan"}
+                    icon={FaNewspaper}
+                  />
+                </>
+              )}
               <Logout />
               <Button
                 transition="200ms"
@@ -210,26 +260,68 @@ export default function Sidebar() {
       {isOpen ? (
         <Box pb={4} display={{ md: "none" }}>
           <Stack as={"nav"} spacing={[4]}>
-            <NavItem
-              link={"/dashboard/admin/"}
-              label={"Dashboard"}
-              icon={BsFillGrid1X2Fill}
-            />
-            <NavItem
-              link={"/dashboard/admin/kamar"}
-              label={"Kamar"}
-              icon={MdBedroomParent}
-            />
-            <NavItem
-              link={"/dashboard/admin/tipe-kamar"}
-              label={"Tipe Kamar"}
-              icon={MdBedtime}
-            />
-            <NavItem
-              link={"/dashboard/admin/User"}
-              label={"Pengguna"}
-              icon={FaUserAlt}
-            />
+            {dataUser.role === "admin" && (
+              <>
+                <NavItem
+                  link={"/dashboard/admin/"}
+                  label={"Dashboard"}
+                  icon={BsFillGrid1X2Fill}
+                />
+                <NavItem
+                  link={"/dashboard/admin/kamar"}
+                  label={"Kamar"}
+                  icon={MdBedroomParent}
+                />
+                <NavItem
+                  link={"/dashboard/admin/tipe-kamar"}
+                  label={"Tipe Kamar"}
+                  icon={MdBedtime}
+                />
+                <NavItem
+                  link={"/dashboard/admin/User"}
+                  label={"Pengguna"}
+                  icon={FaUserAlt}
+                />
+              </>
+            )}
+            {dataUser.role === "resepsionis" && (
+              <>
+                <NavItem
+                  link={"/dashboard/resepsionis/"}
+                  label={"Dashboard"}
+                  icon={BsFillGrid1X2Fill}
+                />
+                <NavItem
+                  link={"/dashboard/resepsionis/pemesanan"}
+                  label={"Pemesanan"}
+                  icon={FaNewspaper}
+                />
+              </>
+            )}
+            {dataUser.role === "tamu" && (
+              <>
+                <NavItem
+                  link={"/dashboard/tamu/"}
+                  label={"Dashboard"}
+                  icon={BsFillGrid1X2Fill}
+                />
+                <NavItem
+                  link={"/dashboard/tamu/kamar"}
+                  label={"Kamar"}
+                  icon={MdBedroomParent}
+                />
+                <NavItem
+                  link={"/dashboard/tamu/cek-pemesanan"}
+                  label={"Cek Pemesanan"}
+                  icon={FaNewspaper}
+                />
+                <NavItem
+                  link={"/dashboard/tamu/histori-pemesanan"}
+                  label={"Histori Pemesanan"}
+                  icon={AiOutlineHistory}
+                />
+              </>
+            )}
             <Logout />
           </Stack>
         </Box>

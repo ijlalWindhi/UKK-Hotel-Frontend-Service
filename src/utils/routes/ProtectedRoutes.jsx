@@ -3,6 +3,8 @@ import { Outlet, Navigate } from "react-router-dom";
 import { getLocalStorage } from "../helper/localStorage";
 import { LOCAL_STORAGE_TOKEN, LOCAL_STORAGE_USER } from "../constants";
 import AdminLayout from "../../components/layout/AdminLayout";
+import ResepsionisLayout from "../../components/layout/ResepsionisLayout";
+import TamuLayout from "../../components/layout/TamuLayout";
 
 const userAuth = () => {
   const token = getLocalStorage(LOCAL_STORAGE_TOKEN);
@@ -25,7 +27,7 @@ const ProtectedRoutes = () => {
     ) : role === "resepsionis" ? (
       <Outlet render={(props) => <ResepsionisLayout {...props} />} />
     ) : (
-      <Outlet render={(props) => <UserLayout {...props} />} />
+      <Outlet render={(props) => <TamuLayout {...props} />} />
     )
   ) : (
     <Navigate to="/login" />
